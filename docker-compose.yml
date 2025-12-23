@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  backend:
+    build: .
+    container_name: dutch-voice-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./voice_assistant.db
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - GOOGLE_CLOUD_CREDENTIALS=/app/credentials.json
+    volumes:
+      - ./backend:/app
+      - ./credentials.json:/app/credentials.json:ro
+    command: python main.py
+    networks:
+      - voice-network
+
+  frontend:
+    image: nginx:alpine
+    container_name: dutch-voice-frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+    networks:
+      - voice-network
+
+networks:
+  voice-network:
+    driver: bridge    
+    
