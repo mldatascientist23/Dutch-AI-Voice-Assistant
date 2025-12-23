@@ -3,8 +3,10 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
 
 import asyncio
+import pytest
 from voice_manager import VoiceManager
 
+@pytest.mark.asyncio
 async def test_tts_initialization():
     """Test TTS manager initialization"""
     try:
@@ -14,6 +16,7 @@ async def test_tts_initialization():
     except Exception as e:
         print(f"✓ TTS Manager init (mock mode): {e}")
 
+@pytest.mark.asyncio
 async def test_synthesize_speech_lifestyle():
     """Test speech synthesis with lifestyle voice"""
     manager = VoiceManager()
@@ -27,6 +30,7 @@ async def test_synthesize_speech_lifestyle():
     except Exception as e:
         print(f"✓ TTS synthesis (mock mode): {e}")
 
+@pytest.mark.asyncio
 async def test_synthesize_speech_business():
     """Test speech synthesis with business voice"""
     manager = VoiceManager()
@@ -39,6 +43,7 @@ async def test_synthesize_speech_business():
     except Exception as e:
         print(f"✓ TTS synthesis (mock mode): {e}")
 
+@pytest.mark.asyncio
 async def test_synthesize_dutch_text():
     """Test TTS with various Dutch phrases"""
     manager = VoiceManager()

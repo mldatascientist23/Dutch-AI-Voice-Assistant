@@ -3,8 +3,10 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
 
 import asyncio
+import pytest
 from voice_manager import VoiceManager
 
+@pytest.mark.asyncio
 async def test_stt_initialization():
     """Test STT manager initialization"""
     try:
@@ -14,6 +16,7 @@ async def test_stt_initialization():
     except Exception as e:
         print(f"✓ STT Manager init (mock mode): {e}")
 
+@pytest.mark.asyncio
 async def test_transcribe_audio_mock():
     """Test audio transcription with mock data"""
     manager = VoiceManager()
@@ -29,6 +32,7 @@ async def test_transcribe_audio_mock():
     except Exception as e:
         print(f"✓ STT transcription (mock mode): {e}")
 
+@pytest.mark.asyncio
 async def test_transcribe_with_confidence():
     """Test transcription confidence scoring"""
     manager = VoiceManager()
@@ -41,6 +45,7 @@ async def test_transcribe_with_confidence():
     except Exception as e:
         print(f"✓ Confidence test (mock mode)")
 
+@pytest.mark.asyncio
 async def test_transcribe_empty_audio():
     """Test handling of empty audio"""
     manager = VoiceManager()
@@ -52,6 +57,7 @@ async def test_transcribe_empty_audio():
     except Exception as e:
         print(f"✓ Empty audio handling (graceful error)")
 
+@pytest.mark.asyncio
 async def test_transcribe_dutch_audio():
     """Test Dutch language transcription"""
     manager = VoiceManager()

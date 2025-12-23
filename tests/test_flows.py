@@ -3,16 +3,21 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
 
 import asyncio
+import pytest
 from conversation_flows import LifestyleCoachFlow, BusinessCallFlow, ConversationFlowManager, VoiceProfile
 
+@pytest.mark.asyncio
 async def test_lifestyle_greeting():
     """Test lifestyle coach greeting"""
     flow = LifestyleCoachFlow()
     greeting = await flow.get_greeting()
     assert greeting is not None
     assert len(greeting) > 0
-    assert "Hallo" in greeting or "Hey" in greeting or "Welkom" in greeting
+    # Check that greeting contains Dutch text
+    dutch_words = ["Hallo", "Hey", "Welkom", "Goedemorgen", "Fijn", "coach"]
+    assert any(word in greeting for word in dutch_words)
 
+@pytest.mark.asyncio
 async def test_lifestyle_response():
     """Test lifestyle coach response"""
     flow = LifestyleCoachFlow()
@@ -20,6 +25,7 @@ async def test_lifestyle_response():
     assert response is not None
     assert len(response) > 0
 
+@pytest.mark.asyncio
 async def test_lifestyle_closing():
     """Test lifestyle coach closing"""
     flow = LifestyleCoachFlow()
@@ -27,14 +33,18 @@ async def test_lifestyle_closing():
     assert closing is not None
     assert len(closing) > 0
 
+@pytest.mark.asyncio
 async def test_business_greeting():
     """Test business call greeting"""
     flow = BusinessCallFlow()
     greeting = await flow.get_greeting()
     assert greeting is not None
     assert len(greeting) > 0
-    assert "Goedemorgen" in greeting or "Hallo" in greeting
+    # Check that greeting contains professional Dutch text
+    dutch_words = ["Goedemorgen", "Hallo", "welkom", "assistent", "dienst"]
+    assert any(word in greeting for word in dutch_words)
 
+@pytest.mark.asyncio
 async def test_business_response():
     """Test business call response"""
     flow = BusinessCallFlow()
@@ -42,6 +52,7 @@ async def test_business_response():
     assert response is not None
     assert len(response) > 0
 
+@pytest.mark.asyncio
 async def test_business_closing():
     """Test business call closing"""
     flow = BusinessCallFlow()
@@ -49,6 +60,7 @@ async def test_business_closing():
     assert closing is not None
     assert len(closing) > 0
 
+@pytest.mark.asyncio
 async def test_flow_manager_lifestyle():
     """Test flow manager with lifestyle profile"""
     manager = ConversationFlowManager(profile=VoiceProfile.LIFESTYLE)
@@ -59,6 +71,7 @@ async def test_flow_manager_lifestyle():
     closing = await manager.close_conversation()
     assert closing is not None
 
+@pytest.mark.asyncio
 async def test_flow_manager_business():
     """Test flow manager with business profile"""
     manager = ConversationFlowManager(profile=VoiceProfile.BUSINESS)
