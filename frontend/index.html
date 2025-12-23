@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dutch AI Voice Assistant - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Dutch AI Voice Assistant</h1>
+            <p>Real-time Voice Communication Dashboard</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <button id="nav-overview" class="nav-btn active" onclick="showSection('overview')">Overview</button>
+            <button id="nav-calls" class="nav-btn" onclick="showSection('calls')">Active Calls</button>
+            <button id="nav-transcripts" class="nav-btn" onclick="showSection('transcripts')">Transcripts</button>
+            <button id="nav-create" class="nav-btn" onclick="showSection('create')">New Call</button>
+        </nav>
+
+        <!-- Overview Section -->
+        <section id="overview" class="section active">
+            <div class="section-title">Dashboard Overview</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Calls</div>
+                    <div class="stat-value" id="stat-total">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Active Calls</div>
+                    <div class="stat-value" id="stat-active">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Completed Calls</div>
+                    <div class="stat-value" id="stat-completed">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Duration</div>
+                    <div class="stat-value" id="stat-avg">0s</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Minutes</div>
+                    <div class="stat-value" id="stat-minutes">0</div>
+                </div>
+            </div>
+            <button id="refresh-stats" class="btn btn-primary" onclick="refreshStats()">Refresh Stats</button>
+        </section>
+
+        <!-- Active Calls Section -->
+        <section id="calls" class="section">
+            <div class="section-title">Active Calls</div>
+            <div id="calls-list" class="calls-list">
+                <p class="empty-state">No active calls</p>
+            </div>
+            <button class="btn btn-primary" onclick="loadCalls()">Refresh Calls</button>
+        </section>
+
+        <!-- Transcripts Section -->
+        <section id="transcripts" class="section">
+            <div class="section-title">Call Transcripts</div>
+            <div class="search-box">
+                <input type="text" id="search-call" placeholder="Enter Call ID...">
+                <button class="btn btn-secondary" onclick="searchTranscript()">Search</button>
+            </div>
+            <div id="transcript-display" class="transcript-display">
+                <p class="empty-state">Enter a call ID to view transcript</p>
+            </div>
+        </section>
+
+        <!-- Create Call Section -->
+        <section id="create" class="section">
+            <div class="section-title">Start New Call</div>
+            <div class="form-group">
+                <label for="user-id">User ID:</label>
+                <input type="text" id="user-id" placeholder="Enter user identifier" value="user_" />
+            </div>
+            <div class="form-group">
+                <label for="voice-profile">Voice Profile:</label>
+                <select id="voice-profile">
+                    <option value="lifestyle">Lifestyle Coach (Friendly)</option>
+                    <option value="business">Business Service (Professional)</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="createCall()">Start Call</button>
+            <div id="create-response" class="response-message"></div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Dutch AI Voice Assistant. All rights reserved.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
