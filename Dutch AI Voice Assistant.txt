@@ -1,0 +1,41 @@
+Dutch AI Voice Assistant
+
+Goal: Build a human-like Dutch AI voice assistant with real-time responses and a web dashboard.
+
+Voice Profiles:
+
+Friendly & Casual – lifestyle coaching check-ins
+
+Professional & Business-Friendly – inbound/outbound service calls
+
+Key Features:
+
+Low-latency, real-time conversation
+
+Web dashboard to monitor calls, view transcripts, and adjust scripts/voice
+
+Custom conversation flows for different use cases
+
+Easily upgradeable for future enhancements
+
+High-quality Dutch TTS with natural tone, pacing, and emotion
+
+Deliverables:
+
+Fully functional Dutch AI voice assistant
+
+Demo for client review
+
+Web dashboard integration
+
+Clear documentation for usage and future updates
+
+Notes for Developer:
+
+Start with Dutch voices only
+
+Ensure smooth, human-like interactions
+
+Prioritize reliability and responsiveness
+
+System should support easy expansion/upgrades
