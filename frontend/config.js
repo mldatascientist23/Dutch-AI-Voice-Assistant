@@ -2,24 +2,22 @@
 window.APP_CONFIG = {
     // Determine API base URL dynamically
     getApiBaseUrl: function() {
-        // If running in Docker/production with nginx proxy
-        // API calls should go through /api/ proxy
         const hostname = window.location.hostname;
         const port = window.location.port;
         const protocol = window.location.protocol;
         
-        // Check if we're accessing via nginx (production setup)
-        // In production, API is available at /api/
-        if (port === '80' || port === '443' || port === '') {
-            // Production: use /api prefix for nginx proxy
-            return `${protocol}//${hostname}/api`;
-        } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            // Local development: direct backend connection
-            return 'http://localhost:8000';
-        } else {
-            // Other cases: try /api prefix
-            return `${protocol}//${hostname}/api`;
+        // For local development (localhost with non-default port)
+        // Check if we should use direct backend connection
+        if ((hostname === 'localhost' || hostname === '127.0.0.1') && port && port !== '80' && port !== '443') {
+            // When running frontend on localhost with a custom port,
+            // try direct backend connection first
+            return `${protocol}//${hostname}:8000`;
         }
+        
+        // For production or when on default ports (80/443)
+        // Use nginx proxy with /api prefix
+        const portSuffix = (port && port !== '80' && port !== '443') ? ':' + port : '';
+        return `${protocol}//${hostname}${portSuffix}/api`;
     },
     
     // Get the computed API base URL
