@@ -8,14 +8,31 @@ import logging
 import uuid
 from datetime import datetime
 from config import settings
+from contextlib import asynccontextmanager
 
 logging.basicConfig(level=settings.LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
+active_calls = {}
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize database on startup"""
+    try:
+        init_db()
+        logger.info("Application started successfully")
+    except Exception as e:
+        logger.error(f"Startup error: {e}")
+        raise
+    yield
+    # Cleanup on shutdown
+    logger.info("Application shutting down")
+
 app = FastAPI(
     title="Dutch AI Voice Assistant",
     description="Real-time Dutch voice AI assistant with web dashboard",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 app.add_middleware(
@@ -25,18 +42,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-active_calls = {}
-
-@app.on_event("startup")
-async def startup_event():
-    """Initialize database on startup"""
-    try:
-        init_db()
-        logger.info("Application started successfully")
-    except Exception as e:
-        logger.error(f"Startup error: {e}")
-        raise
 
 @app.get("/health")
 async def health_check():
