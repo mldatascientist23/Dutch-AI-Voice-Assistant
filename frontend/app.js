@@ -102,6 +102,27 @@ async function createCall() {
 }
 
 window.addEventListener('load', () => {
+    // Check backend connectivity
+    checkBackendConnection();
+    
     refreshStats();
     setInterval(refreshStats, 5000);
 });
+
+async function checkBackendConnection() {
+    try {
+        const response = await fetch(`${API_BASE}/health`, { 
+            mode: 'cors'
+        });
+        if (response.ok) {
+            // Backend is accessible, hide warning
+            document.getElementById('backend-warning').style.display = 'none';
+        } else {
+            throw new Error('Backend responded with error');
+        }
+    } catch (e) {
+        // Backend is not accessible, show warning
+        console.error('Backend connection failed:', e);
+        document.getElementById('backend-warning').style.display = 'block';
+    }
+}

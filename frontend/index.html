@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Backend Configuration Warning -->
+    <div id="backend-warning" style="display: none; background: #fff3cd; border: 2px solid #ffc107; padding: 15px; margin: 10px; border-radius: 5px; text-align: center;">
+        <strong>⚠️ Backend Not Configured</strong><br>
+        The backend API is not responding. Please configure your backend URL or <a href="/setup.html" style="color: #0066cc; text-decoration: underline;">view setup instructions</a>.
+    </div>
+    
     <div class="container">
         <!-- Header -->
         <header class="header">
@@ -94,6 +100,7 @@
         <p>&copy; 2024 Dutch AI Voice Assistant. All rights reserved.</p>
     </footer>
 
+    <script src="env-config.js"></script>
     <script src="config.js"></script>
     <script src="app.js"></script>
 </body>

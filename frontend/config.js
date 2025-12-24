@@ -2,6 +2,12 @@
 window.APP_CONFIG = {
     // Determine API base URL dynamically
     getApiBaseUrl: function() {
+        // Check for custom backend URL from environment variable or window config
+        // This can be set via Vercel environment variables as BACKEND_API_URL
+        if (window.BACKEND_API_URL) {
+            return window.BACKEND_API_URL;
+        }
+        
         const hostname = window.location.hostname;
         const port = window.location.port;
         const protocol = window.location.protocol;

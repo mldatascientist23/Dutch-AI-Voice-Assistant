@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dutch AI Voice Assistant - Setup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .error-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        ol {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎙️ Dutch AI Voice Assistant - Vercel Deployment Setup</h1>
+        
+        <div class="warning-box">
+            <strong>⚠️ Important:</strong> This application requires a backend server to function. The frontend is currently deployed on Vercel, but you need to deploy the backend separately.
+        </div>
+
+        <h2>🚀 Quick Setup Guide</h2>
+        
+        <div class="info-box">
+            <strong>📝 Note:</strong> The Dutch AI Voice Assistant consists of two parts:
+            <ul>
+                <li><strong>Frontend:</strong> HTML/CSS/JS dashboard (deployed on Vercel)</li>
+                <li><strong>Backend:</strong> FastAPI server (needs separate hosting)</li>
+            </ul>
+        </div>
+
+        <h3>Step 1: Deploy the Backend</h3>
+        <p>The backend needs to be hosted on a platform that supports Python/FastAPI. Here are recommended options:</p>
+        
+        <ul>
+            <li><strong>Render.com</strong> - Free tier available, easy Python deployment</li>
+            <li><strong>Railway.app</strong> - Simple deployment with GitHub integration</li>
+            <li><strong>Heroku</strong> - Reliable but requires credit card for free tier</li>
+            <li><strong>Google Cloud Run</strong> - Serverless container platform</li>
+            <li><strong>Your own server</strong> - Full control</li>
+        </ul>
+
+        <h4>Example: Deploy Backend on Render.com</h4>
+        <ol>
+            <li>Sign up at <a href="https://render.com" target="_blank">render.com</a></li>
+            <li>Create a new "Web Service"</li>
+            <li>Connect your GitHub repository</li>
+            <li>Set the root directory to <code>backend</code></li>
+            <li>Set build command: <code>pip install -r requirements.txt</code></li>
+            <li>Set start command: <code>uvicorn main:app --host 0.0.0.0 --port $PORT</code></li>
+            <li>Deploy and copy your backend URL (e.g., <code>https://your-app.onrender.com</code>)</li>
+        </ol>
+
+        <h3>Step 2: Configure Vercel with Your Backend URL</h3>
+        <p>After deploying the backend, configure the Vercel deployment:</p>
+        
+        <ol>
+            <li>Go to your Vercel project dashboard</li>
+            <li>Navigate to <strong>Settings → Environment Variables</strong></li>
+            <li>Add a new environment variable:
+                <ul>
+                    <li><strong>Name:</strong> <code>BACKEND_API_URL</code></li>
+                    <li><strong>Value:</strong> Your backend URL (e.g., <code>https://your-app.onrender.com</code>)</li>
+                </ul>
+            </li>
+            <li>Redeploy your Vercel application</li>
+        </ol>
+
+        <div class="success-box">
+            <strong>✅ Alternative:</strong> You can also set the backend URL by adding it to the <code>frontend/config.js</code> file directly by setting <code>window.BACKEND_API_URL</code> before the script loads.
+        </div>
+
+        <h3>Step 3: Test Your Deployment</h3>
+        <p>Once both are deployed and configured:</p>
+        <ol>
+            <li>Visit your Vercel URL</li>
+            <li>Open browser console (F12) and check the "API Base URL" log</li>
+            <li>Try creating a new call from the dashboard</li>
+            <li>Verify the dashboard connects to your backend</li>
+        </ol>
+
+        <h2>🔧 Local Development</h2>
+        <pre>
+# Terminal 1 - Start Backend
+cd backend
+pip install -r requirements.txt
+python main.py
+
+# Terminal 2 - Start Frontend
+cd frontend
+python -m http.server 3000
+        </pre>
+
+        <h2>📚 Full Documentation</h2>
+        <p>For detailed deployment instructions, see:</p>
+        <ul>
+            <li><a href="https://github.com/mldatascientist23/Dutch-AI-Voice-Assistant/blob/main/DEPLOYMENT.md">DEPLOYMENT.md</a></li>
+            <li><a href="https://github.com/mldatascientist23/Dutch-AI-Voice-Assistant/blob/main/README.md">README.md</a></li>
+        </ul>
+
+        <div class="error-box">
+            <strong>❌ Backend Not Configured:</strong> If you see errors about failed API calls, it means the backend URL is not configured or the backend is not running. Follow the steps above to complete the setup.
+        </div>
+
+        <a href="/index.html" class="btn">Continue to Dashboard →</a>
+    </div>
+</body>
+</html>
