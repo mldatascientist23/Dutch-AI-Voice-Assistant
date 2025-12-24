@@ -1,10 +1,24 @@
 {
+  "buildCommand": "node build.js",
   "rewrites": [
+    { "source": "/setup.html", "destination": "/frontend/setup.html" },
     { "source": "/", "destination": "/frontend/index.html" },
     { "source": "/index.html", "destination": "/frontend/index.html" },
     { "source": "/style.css", "destination": "/frontend/style.css" },
     { "source": "/app.js", "destination": "/frontend/app.js" },
-    { "source": "/config.js", "destination": "/frontend/config.js" }
+    { "source": "/config.js", "destination": "/frontend/config.js" },
+    { "source": "/env-config.js", "destination": "/frontend/env-config.js" }
+  ],
+  "headers": [
+    {
+      "source": "/frontend/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
   ]
 }
 
