@@ -126,8 +126,23 @@ python -m http.server 3000
 - **API Docs**: http://localhost:8000/docs
 - **Health Check**: http://localhost:8000/health
 
-**📖 For complete deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)**  
-**🚀 For live server deployment, see [LIVE_SERVER_DEPLOYMENT.md](LIVE_SERVER_DEPLOYMENT.md)**
+## 📚 Deployment Guides
+
+Choose your deployment platform:
+
+- **📖 Local/Server Deployment**: [DEPLOYMENT.md](DEPLOYMENT.md) - Full deployment instructions for local machines or dedicated servers
+- **🚀 Vercel Deployment**: [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) - Deploy frontend to Vercel (backend needs separate hosting)
+- **🌐 Live Server with Nginx**: [LIVE_SERVER_DEPLOYMENT.md](LIVE_SERVER_DEPLOYMENT.md) - Production deployment with reverse proxy
+
+### Quick Deploy to Vercel
+
+1. Fork this repository
+2. Deploy backend to [Render](https://render.com), [Railway](https://railway.app), or your server
+3. Import project to [Vercel](https://vercel.com)
+4. Set `BACKEND_API_URL` environment variable in Vercel to your backend URL
+5. Deploy! ✨
+
+See [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) for detailed instructions.
 
 ---
 
