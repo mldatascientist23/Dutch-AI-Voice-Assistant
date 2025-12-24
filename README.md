@@ -126,7 +126,8 @@ python -m http.server 3000
 - **API Docs**: http://localhost:8000/docs
 - **Health Check**: http://localhost:8000/health
 
-**📖 For complete deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)**
+**📖 For complete deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)**  
+**🚀 For live server deployment, see [LIVE_SERVER_DEPLOYMENT.md](LIVE_SERVER_DEPLOYMENT.md)**
 
 ---
 
