@@ -112,7 +112,6 @@ window.addEventListener('load', () => {
 async function checkBackendConnection() {
     try {
         const response = await fetch(`${API_BASE}/health`, { 
-            method: 'GET',
             mode: 'cors'
         });
         if (response.ok) {
