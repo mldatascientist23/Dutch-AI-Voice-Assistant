@@ -1,4 +1,5 @@
-const API_BASE = 'http://localhost:8000';
+// Use dynamic API_BASE from config.js
+const API_BASE = window.APP_CONFIG.API_BASE;
 
 function showSection(sectionId) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
