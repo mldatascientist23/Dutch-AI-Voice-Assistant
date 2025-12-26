@@ -324,4 +324,4 @@ If using custom domain for backend:
 
 **🎉 Congratulations! Your Dutch AI Voice Assistant is now live on Netlify!**
 
-For issues or questions, please open an issue on GitHub.
+For issues or questions, please [open an issue on GitHub](https://github.com/mldatascientist23/Dutch-AI-Voice-Assistant/issues).

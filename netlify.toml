@@ -1,7 +1,8 @@
 # Netlify Configuration for Dutch AI Voice Assistant
 
 [build]
-  # Directory containing the frontend files
+  # The frontend files are in the 'frontend' subdirectory, not the root
+  # This is because the project has both frontend (static) and backend (Python/FastAPI) components
   publish = "frontend"
   
   # Build command to generate env-config.js with backend URL
@@ -13,11 +14,6 @@
 # Redirects for Single Page Application (SPA) support
 [[redirects]]
   from = "/setup"
-  to = "/setup.html"
-  status = 200
-
-[[redirects]]
-  from = "/setup.html"
   to = "/setup.html"
   status = 200
 
@@ -38,14 +34,14 @@
 [[headers]]
   for = "/*.js"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "no-cache"
 
 [[headers]]
   for = "/*.css"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "no-cache"
 
 [[headers]]
   for = "/*.html"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "no-cache"
