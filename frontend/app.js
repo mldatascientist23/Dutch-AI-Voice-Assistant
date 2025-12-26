@@ -182,11 +182,19 @@ function saveBackendUrl() {
         return;
     }
     
-    // Basic URL validation
+    // URL validation with protocol check
+    let parsedUrl;
     try {
-        new URL(url);
+        parsedUrl = new URL(url);
     } catch (e) {
         errorEl.textContent = 'Please enter a valid URL (e.g., https://your-backend.onrender.com)';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    // Ensure http or https protocol
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+        errorEl.textContent = 'URL must use http or https protocol';
         errorEl.style.display = 'block';
         return;
     }
@@ -250,13 +258,5 @@ async function checkBackendConnection() {
         backendAvailable = false;
         console.warn('Backend connection failed:', e.message);
         document.getElementById('backend-warning').style.display = 'block';
-        
-        // Pre-fill the input if there's a stored URL (helps with debugging)
-        if (window.APP_CONFIG.isUserConfigured()) {
-            const input = document.getElementById('backend-url-input');
-            if (input) {
-                input.value = API_BASE;
-            }
-        }
     }
 }

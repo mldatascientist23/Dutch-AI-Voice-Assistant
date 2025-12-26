@@ -38,7 +38,7 @@ window.APP_CONFIG = {
     // Save backend URL to localStorage
     setBackendUrl: function(url) {
         if (url) {
-            // Remove trailing slash if present
+            // Remove any trailing slashes
             url = url.replace(/\/+$/, '');
             localStorage.setItem(this.STORAGE_KEY, url);
         } else {
