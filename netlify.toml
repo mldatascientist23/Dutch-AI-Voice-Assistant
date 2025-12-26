@@ -1,0 +1,51 @@
+# Netlify Configuration for Dutch AI Voice Assistant
+
+[build]
+  # Directory containing the frontend files
+  publish = "frontend"
+  
+  # Build command to generate env-config.js with backend URL
+  command = "node build.js"
+
+# Environment variables can be set in Netlify Dashboard
+# Set BACKEND_API_URL to your backend URL (e.g., https://your-backend.onrender.com)
+
+# Redirects for Single Page Application (SPA) support
+[[redirects]]
+  from = "/setup"
+  to = "/setup.html"
+  status = 200
+
+[[redirects]]
+  from = "/setup.html"
+  to = "/setup.html"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for security and caching
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
