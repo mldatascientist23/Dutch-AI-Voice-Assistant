@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Build script for Vercel deployment
+ * Build script for Vercel and Netlify deployment
  * Generates env-config.js with backend URL from environment variables
  */
 

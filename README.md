@@ -132,6 +132,7 @@ Choose your deployment platform:
 
 - **📖 Local/Server Deployment**: [DEPLOYMENT.md](DEPLOYMENT.md) - Full deployment instructions for local machines or dedicated servers
 - **🚀 Vercel Deployment**: [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) - Deploy frontend to Vercel (backend needs separate hosting)
+- **🌐 Netlify Deployment**: [NETLIFY_DEPLOYMENT.md](NETLIFY_DEPLOYMENT.md) - Deploy frontend to Netlify (backend needs separate hosting)
 - **🌐 Live Server with Nginx**: [LIVE_SERVER_DEPLOYMENT.md](LIVE_SERVER_DEPLOYMENT.md) - Production deployment with reverse proxy
 
 ### Quick Deploy to Vercel
@@ -143,6 +144,16 @@ Choose your deployment platform:
 5. Deploy! ✨
 
 See [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) for detailed instructions.
+
+### Quick Deploy to Netlify
+
+1. Fork this repository
+2. Deploy backend to [Render](https://render.com), [Railway](https://railway.app), or your server
+3. Import project to [Netlify](https://netlify.com)
+4. Set `BACKEND_API_URL` environment variable in Netlify to your backend URL
+5. Deploy! ✨
+
+See [NETLIFY_DEPLOYMENT.md](NETLIFY_DEPLOYMENT.md) for detailed instructions.
 
 ---
 
