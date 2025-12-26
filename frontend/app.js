@@ -1,6 +1,39 @@
 // Use dynamic API_BASE from config.js
 const API_BASE = window.APP_CONFIG.API_BASE;
 
+// Track backend availability
+let backendAvailable = false;
+
+// Demo/mock data for when backend is not available
+const DEMO_STATS = {
+    total_calls: 0,
+    active_calls: 0,
+    completed_calls: 0,
+    average_duration: 0,
+    total_conversation_minutes: 0
+};
+
+/**
+ * Safely fetch and parse JSON response
+ * Handles cases where response is not JSON (e.g., HTML error pages)
+ */
+async function safeFetch(url, options = {}) {
+    const response = await fetch(url, options);
+    
+    // Check if response is OK
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    // Check content-type to ensure we're getting JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Backend returned non-JSON response. Is the backend server running?');
+    }
+    
+    return response.json();
+}
+
 function showSection(sectionId) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -9,24 +42,40 @@ function showSection(sectionId) {
 }
 
 async function refreshStats() {
+    // If backend is not available, use demo data without trying to fetch
+    if (!backendAvailable) {
+        document.getElementById('stat-total').textContent = DEMO_STATS.total_calls;
+        document.getElementById('stat-active').textContent = DEMO_STATS.active_calls;
+        document.getElementById('stat-completed').textContent = DEMO_STATS.completed_calls;
+        document.getElementById('stat-avg').textContent = Math.round(DEMO_STATS.average_duration) + 's';
+        document.getElementById('stat-minutes').textContent = Math.round(DEMO_STATS.total_conversation_minutes);
+        return;
+    }
+    
     try {
-        const res = await fetch(`${API_BASE}/stats`);
-        const data = await res.json();
+        const data = await safeFetch(`${API_BASE}/stats`);
         document.getElementById('stat-total').textContent = data.total_calls;
         document.getElementById('stat-active').textContent = data.active_calls;
         document.getElementById('stat-completed').textContent = data.completed_calls;
         document.getElementById('stat-avg').textContent = Math.round(data.average_duration) + 's';
         document.getElementById('stat-minutes').textContent = Math.round(data.total_conversation_minutes);
     } catch (e) {
-        alert('Error loading statistics: ' + e.message);
+        // Silently fail if backend is not available - the warning banner already shows
+        console.error('Error loading statistics:', e.message);
     }
 }
 
 async function loadCalls() {
+    const list = document.getElementById('calls-list');
+    
+    // If backend is not available, show appropriate message
+    if (!backendAvailable) {
+        list.innerHTML = '<p class="empty-state">Backend not connected. Please configure your backend server to view calls.</p>';
+        return;
+    }
+    
     try {
-        const res = await fetch(`${API_BASE}/calls`);
-        const data = await res.json();
-        const list = document.getElementById('calls-list');
+        const data = await safeFetch(`${API_BASE}/calls`);
         
         if (!data.calls || data.calls.length === 0) {
             list.innerHTML = '<p class="empty-state">No active calls</p>';
@@ -42,28 +91,40 @@ async function loadCalls() {
             </div>
         `).join('');
     } catch (e) {
-        alert('Error loading calls: ' + e.message);
+        console.error('Error loading calls:', e.message);
+        list.innerHTML = `<p class="error-message" style="color: #dc3545; padding: 10px; background: #f8d7da; border-radius: 5px;">Error loading calls: ${e.message}</p>`;
     }
 }
 
 async function searchTranscript() {
     const callId = document.getElementById('search-call').value;
+    const display = document.getElementById('transcript-display');
+    
     if (!callId) {
-        alert('Please enter a call ID');
+        display.innerHTML = '<p class="error-message" style="color: #dc3545; padding: 10px; background: #f8d7da; border-radius: 5px;">Please enter a call ID</p>';
+        return;
+    }
+    
+    // If backend is not available, show appropriate message
+    if (!backendAvailable) {
+        display.innerHTML = '<p class="empty-state">Backend not connected. Please configure your backend server to search transcripts.</p>';
         return;
     }
     
     try {
-        const res = await fetch(`${API_BASE}/calls/${callId}/transcript`);
-        const data = await res.json();
-        const display = document.getElementById('transcript-display');
+        const data = await safeFetch(`${API_BASE}/calls/${callId}/transcript`);
         
         if (!data.transcript || data.transcript.length === 0) {
             display.innerHTML = '<p class="empty-state">No transcript found</p>';
             return;
         }
         
-        const turns = JSON.parse(data.transcript) || [];
+        const turns = typeof data.transcript === 'string' ? JSON.parse(data.transcript) : data.transcript;
+        if (!turns || turns.length === 0) {
+            display.innerHTML = '<p class="empty-state">No transcript found</p>';
+            return;
+        }
+        
         display.innerHTML = turns.map(turn => `
             <div class="transcript-turn ${turn.role}">
                 <div class="transcript-label">${turn.role === 'user' ? 'You' : 'Assistant'}:</div>
@@ -71,42 +132,55 @@ async function searchTranscript() {
             </div>
         `).join('');
     } catch (e) {
-        alert('Error loading transcript: ' + e.message);
+        console.error('Error loading transcript:', e.message);
+        display.innerHTML = `<p class="error-message" style="color: #dc3545; padding: 10px; background: #f8d7da; border-radius: 5px;">Error loading transcript: ${e.message}</p>`;
     }
 }
 
 async function createCall() {
     const userId = document.getElementById('user-id').value;
     const profile = document.getElementById('voice-profile').value;
+    const msg = document.getElementById('create-response');
     
     if (!userId) {
-        alert('Please enter a user ID');
+        msg.className = 'response-message error';
+        msg.textContent = 'Please enter a user ID';
+        return;
+    }
+    
+    // If backend is not available, show appropriate message
+    if (!backendAvailable) {
+        msg.className = 'response-message error';
+        msg.textContent = 'Backend not connected. Please configure your backend server to create calls.';
         return;
     }
     
     try {
-        const res = await fetch(`${API_BASE}/calls`, {
+        const data = await safeFetch(`${API_BASE}/calls`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({user_id: userId, voice_profile: profile})
         });
-        const data = await res.json();
-        const msg = document.getElementById('create-response');
         msg.className = 'response-message success';
         msg.textContent = `Call created! ID: ${data.call_id}`;
     } catch (e) {
-        const msg = document.getElementById('create-response');
+        console.error('Error creating call:', e.message);
         msg.className = 'response-message error';
         msg.textContent = 'Error: ' + e.message;
     }
 }
 
-window.addEventListener('load', () => {
-    // Check backend connectivity
-    checkBackendConnection();
+window.addEventListener('load', async () => {
+    // Check backend connectivity first
+    await checkBackendConnection();
     
+    // Then load initial stats
     refreshStats();
-    setInterval(refreshStats, 5000);
+    
+    // Set up periodic refresh only if backend is available
+    if (backendAvailable) {
+        setInterval(refreshStats, 5000);
+    }
 });
 
 async function checkBackendConnection() {
@@ -114,15 +188,26 @@ async function checkBackendConnection() {
         const response = await fetch(`${API_BASE}/health`, { 
             mode: 'cors'
         });
+        
+        // Check if response is OK and JSON
         if (response.ok) {
-            // Backend is accessible, hide warning
-            document.getElementById('backend-warning').style.display = 'none';
-        } else {
-            throw new Error('Backend responded with error');
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                if (data.status === 'healthy') {
+                    // Backend is accessible and healthy
+                    backendAvailable = true;
+                    document.getElementById('backend-warning').style.display = 'none';
+                    console.log('Backend connected successfully');
+                    return;
+                }
+            }
         }
+        throw new Error('Backend health check failed');
     } catch (e) {
         // Backend is not accessible, show warning
-        console.error('Backend connection failed:', e);
+        backendAvailable = false;
+        console.warn('Backend connection failed:', e.message);
         document.getElementById('backend-warning').style.display = 'block';
     }
 }
