@@ -1,7 +1,16 @@
 // Configuration for different environments
 window.APP_CONFIG = {
+    // localStorage key for backend URL
+    STORAGE_KEY: 'dutch_ai_backend_url',
+    
     // Determine API base URL dynamically
     getApiBaseUrl: function() {
+        // First, check localStorage for user-configured backend URL
+        const storedUrl = localStorage.getItem(this.STORAGE_KEY);
+        if (storedUrl) {
+            return storedUrl;
+        }
+        
         // Check for custom backend URL from environment variable or window config
         // This can be set via Vercel environment variables as BACKEND_API_URL
         if (window.BACKEND_API_URL) {
@@ -24,6 +33,30 @@ window.APP_CONFIG = {
         // Use nginx proxy with /api prefix
         const portSuffix = (port && port !== '80' && port !== '443') ? ':' + port : '';
         return `${protocol}//${hostname}${portSuffix}/api`;
+    },
+    
+    // Save backend URL to localStorage
+    setBackendUrl: function(url) {
+        if (url) {
+            // Remove trailing slash if present
+            url = url.replace(/\/+$/, '');
+            localStorage.setItem(this.STORAGE_KEY, url);
+        } else {
+            localStorage.removeItem(this.STORAGE_KEY);
+        }
+        // Reload to apply the new URL
+        window.location.reload();
+    },
+    
+    // Clear stored backend URL
+    clearBackendUrl: function() {
+        localStorage.removeItem(this.STORAGE_KEY);
+        window.location.reload();
+    },
+    
+    // Check if backend URL is user-configured (via localStorage)
+    isUserConfigured: function() {
+        return !!localStorage.getItem(this.STORAGE_KEY);
     },
     
     // Get the computed API base URL

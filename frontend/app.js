@@ -170,6 +170,36 @@ async function createCall() {
     }
 }
 
+// Save backend URL from the configuration form
+function saveBackendUrl() {
+    const input = document.getElementById('backend-url-input');
+    const errorEl = document.getElementById('backend-url-error');
+    const url = input.value.trim();
+    
+    if (!url) {
+        errorEl.textContent = 'Please enter a backend URL';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    // Basic URL validation
+    try {
+        new URL(url);
+    } catch (e) {
+        errorEl.textContent = 'Please enter a valid URL (e.g., https://your-backend.onrender.com)';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    // Save and reload
+    window.APP_CONFIG.setBackendUrl(url);
+}
+
+// Clear the stored backend URL
+function clearBackendUrl() {
+    window.APP_CONFIG.clearBackendUrl();
+}
+
 window.addEventListener('load', async () => {
     // Check backend connectivity first
     await checkBackendConnection();
@@ -198,6 +228,17 @@ async function checkBackendConnection() {
                     // Backend is accessible and healthy
                     backendAvailable = true;
                     document.getElementById('backend-warning').style.display = 'none';
+                    
+                    // Show backend info if user configured
+                    if (window.APP_CONFIG.isUserConfigured()) {
+                        const backendInfo = document.getElementById('backend-info');
+                        const urlDisplay = document.getElementById('current-backend-url');
+                        if (backendInfo && urlDisplay) {
+                            urlDisplay.textContent = API_BASE;
+                            backendInfo.style.display = 'block';
+                        }
+                    }
+                    
                     console.log('Backend connected successfully');
                     return;
                 }
@@ -209,5 +250,13 @@ async function checkBackendConnection() {
         backendAvailable = false;
         console.warn('Backend connection failed:', e.message);
         document.getElementById('backend-warning').style.display = 'block';
+        
+        // Pre-fill the input if there's a stored URL (helps with debugging)
+        if (window.APP_CONFIG.isUserConfigured()) {
+            const input = document.getElementById('backend-url-input');
+            if (input) {
+                input.value = API_BASE;
+            }
+        }
     }
 }

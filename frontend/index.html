@@ -10,7 +10,18 @@
     <!-- Backend Configuration Warning -->
     <div id="backend-warning" style="display: none; background: #fff3cd; border: 2px solid #ffc107; padding: 15px; margin: 10px; border-radius: 5px; text-align: center;">
         <strong>⚠️ Backend Not Configured</strong><br>
-        The backend API is not responding. Please configure your backend URL or <a href="/setup.html" style="color: #0066cc; text-decoration: underline;">view setup instructions</a>.
+        <p style="margin: 10px 0;">The backend API is not responding. Enter your backend URL below or <a href="/setup.html" style="color: #0066cc; text-decoration: underline;">view setup instructions</a>.</p>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
+            <input type="text" id="backend-url-input" placeholder="https://your-backend.onrender.com" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; min-width: 280px; font-size: 14px;">
+            <button onclick="saveBackendUrl()" style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Save & Connect</button>
+        </div>
+        <p id="backend-url-error" style="color: #dc3545; margin-top: 8px; display: none;"></p>
+    </div>
+    
+    <!-- Backend URL Info (when configured via localStorage) -->
+    <div id="backend-info" style="display: none; background: #d4edda; border: 2px solid #28a745; padding: 10px 15px; margin: 10px; border-radius: 5px; text-align: center;">
+        <span>✅ Connected to: <strong id="current-backend-url"></strong></span>
+        <button onclick="clearBackendUrl()" style="margin-left: 15px; padding: 4px 12px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Change</button>
     </div>
     
     <div class="container">
