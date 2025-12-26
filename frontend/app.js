@@ -41,16 +41,6 @@ function showSection(sectionId) {
     document.getElementById('nav-' + sectionId).classList.add('active');
 }
 
-/**
- * Display error message inline instead of using alert()
- */
-function showError(elementId, message) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.innerHTML = `<p class="error-message" style="color: #dc3545; padding: 10px; background: #f8d7da; border-radius: 5px; margin: 10px 0;">${message}</p>`;
-    }
-}
-
 async function refreshStats() {
     // If backend is not available, use demo data without trying to fetch
     if (!backendAvailable) {
@@ -188,7 +178,9 @@ window.addEventListener('load', async () => {
     refreshStats();
     
     // Set up periodic refresh only if backend is available
-    setInterval(refreshStats, 5000);
+    if (backendAvailable) {
+        setInterval(refreshStats, 5000);
+    }
 });
 
 async function checkBackendConnection() {
